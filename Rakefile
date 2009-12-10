@@ -28,6 +28,7 @@ spec = Gem::Specification.new do |s|
 
   s.files        = FileList['README.rdoc', 'Rakefile', 'lib/**/*.rb', 'spec/**/*.rb', 'spec/**/*.bin', 'spec/spec.opts']
   s.require_path = 'lib'
+  s.extensions = ["ext/extconf.rb"]
   s.test_files   = Dir[*['spec/**/*_spec.rb']]
 
   s.has_rdoc         = true

@@ -7,7 +7,8 @@ rescue LoadError
 end
 require 'spec/autorun'
 
-$:.unshift(File.dirname(__FILE__) + '/../lib')
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'ext'))
+$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'rocketamf'
 
 def request_fixture(binary_path)

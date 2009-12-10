@@ -1,14 +1,16 @@
-$:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) || $:.include?(File.expand_path(File.dirname(__FILE__)))
-$:.unshift "#{File.expand_path(File.dirname(__FILE__))}/rocketamf/"
-
 require 'rocketamf/version'
 require 'rocketamf/class_mapping'
 require 'rocketamf/constants'
 require 'rocketamf/remoting'
 
+module AMF
+  ClassMapper = RocketAMF::ClassMapping.new
+end
+
 module RocketAMF
   begin
-    raise LoadError, 'C extensions not implemented'
+    require 'rocketamf/ext'
+    #raise LoadError, 'C extensions not implemented'
   rescue LoadError
     require 'rocketamf/pure'
   end

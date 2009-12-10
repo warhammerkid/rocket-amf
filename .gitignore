@@ -3,3 +3,8 @@ pkg/*
 .project
 /rdoc/
 *.gemspec
+/ext/Makefile
+/ext/*.o
+/ext/*.so
+/ext/*.bundle
+/ext/*.dll
