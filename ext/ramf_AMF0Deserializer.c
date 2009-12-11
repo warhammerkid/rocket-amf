@@ -2,7 +2,7 @@
 #include "loader.h"
 #include "ramf_core.h"
 #include "ramf_ReadIOHelpers_inline.h"
-#include "ramf_AMF3Deserializer.h"
+#include "ramf_AMF0Deserializer.h"
 
 #define STATIC static inline
 
