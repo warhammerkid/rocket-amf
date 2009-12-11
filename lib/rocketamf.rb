@@ -3,10 +3,6 @@ require 'rocketamf/class_mapping'
 require 'rocketamf/constants'
 require 'rocketamf/remoting'
 
-module AMF
-  ClassMapper = RocketAMF::ClassMapping.new
-end
-
 module RocketAMF
   begin
     require 'rocketamf/ext'

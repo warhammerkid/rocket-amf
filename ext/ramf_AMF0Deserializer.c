@@ -180,7 +180,7 @@ STATIC VALUE rb_read_typed_object(ramf0_load_context_t* context)
   static ID    rb_amf_get_ruby_obj_id      = (ID)0;
   static ID    rb_amf_populate_ruby_obj_id = (ID)0;
   if (rb_amf_cClassMapper == Qnil) {
-    rb_amf_cClassMapper         = rb_const_get(rb_const_get(rb_cObject, rb_intern("AMF")), rb_intern("ClassMapper"));
+    rb_amf_cClassMapper         = rb_const_get(rb_const_get(rb_cObject, rb_intern("RocketAMF")), rb_intern("ClassMapper"));
     rb_amf_get_ruby_obj_id      = rb_intern("get_ruby_obj");
     rb_amf_populate_ruby_obj_id = rb_intern("populate_ruby_obj");
   }

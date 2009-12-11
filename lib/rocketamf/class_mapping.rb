@@ -162,10 +162,6 @@ module RocketAMF
       mappings.get_as_class_name ruby_class_name
     end
 
-    def get_ruby_class_name(as_class_name)
-      mappings.get_ruby_class_name(as_class_name.to_s)
-    end
-
     # Instantiates a ruby object using the mapping configuration based on the
     # source AS class name. If there is no mapping defined, it returns a hash.
     def get_ruby_obj as_class_name
