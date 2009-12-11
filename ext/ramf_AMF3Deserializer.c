@@ -85,7 +85,7 @@ static inline VALUE rb_read_string(ramf3_load_context_t * context)
     int32_t len = (type >> 1);
     char * buf = (char*)read_bytes(context, len);
     VALUE object = rb_str_new(buf, len);
-    rb_ary_push(context->strings, object);
+    if(len > 0) rb_ary_push(context->strings, object);
     return object;
   }
 }
