@@ -105,16 +105,17 @@ static inline VALUE rb_read_array(ramf3_load_context_t * context)
     read_byte(context); // ignore
     
     VALUE object = rb_ary_new();
+    rb_ary_push(context->objects, object);
     int32_t i = 0;
     for (;i<len;i++) {
       rb_ary_push(object, rb_deserialize(context, READ_TYPE_FROM_IO));
     }
     
-    rb_ary_push(context->objects, object);
     return object;
   } else {
     // hash
     VALUE object = rb_hash_new();
+    rb_ary_push(context->objects, object);
     VALUE key, value;
     while (1) {
       key = rb_read_string(context);
@@ -123,7 +124,6 @@ static inline VALUE rb_read_array(ramf3_load_context_t * context)
       rb_hash_aset(object, key, value);
     }
     
-    rb_ary_push(context->objects, object);
     return object;
   }
 }
