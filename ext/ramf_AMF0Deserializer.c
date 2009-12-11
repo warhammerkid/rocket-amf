@@ -165,12 +165,10 @@ STATIC VALUE rb_read_array(ramf0_load_context_t* context)
 
 STATIC VALUE rb_read_date(ramf0_load_context_t* context)
 {
-  double milliseconds = c_read_double(context) / 1000.0;
+  double milliseconds = c_read_double(context);
   uint16_t tz = c_read_word16_network(context);
-  
-  time_t seconds      = (milliseconds / 1000.0);
-  time_t microseconds = ((milliseconds / 1000.0) - (double)seconds) * (1000.0 * 1000.0);
-  
+  time_t seconds = milliseconds/1000.0;
+  time_t microseconds = (long)(milliseconds*1000.0) % 1000000;
   return rb_time_new(seconds, microseconds);
 }
 

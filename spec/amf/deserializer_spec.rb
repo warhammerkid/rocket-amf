@@ -253,7 +253,7 @@ describe "when deserializing" do
         input = object_fixture("amf3-datesRef.bin")
         output = RocketAMF.deserialize(input, 3)
 
-        output[0].should equal(output[1])
+        output[1].should equal(output[0])
         # Expected object:
         # [DateTime.parse "1/1/1970", DateTime.parse "1/1/1970"]
       end
