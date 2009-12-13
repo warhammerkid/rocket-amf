@@ -2,6 +2,7 @@
 #include "loader.h"
 #include "ramf_core.h"
 #include "ramf_ReadIOHelpers_inline.h"
+#include <string.h>
 
 // AMF3 Type Markers
 #define AMF3_UNDEFINED_MARKER  0x00 //"\000"
@@ -146,13 +147,13 @@ static inline VALUE rb_read_object(ramf3_load_context_t * context)
   
   int32_t class_type = type >> 1;
   if ((class_type & 0x01) == 0) {
-    int32_t class_ref = (type >> 1);
+    int32_t class_ref = (class_type >> 1);
     class_definition  = rb_ary_entry(context->traits, class_ref);
     
-    externalizable   = rb_hash_aget(class_definition, rb_str_new2("class_name"));
-    class_attributes = rb_hash_aget(class_definition, rb_str_new2("members"));
-    externalizable   = rb_hash_aget(class_definition, rb_str_new2("externalizable")) == Qtrue;
-    dynamic          = rb_hash_aget(class_definition, rb_str_new2("dynamic"))        == Qtrue;
+    class_name   = rb_hash_aref(class_definition, rb_str_new2("class_name"));
+    externalizable   = rb_hash_aref(class_definition, rb_str_new2("externalizable")) == Qtrue;
+    dynamic          = rb_hash_aref(class_definition, rb_str_new2("dynamic"))        == Qtrue;
+    class_attributes = rb_hash_aref(class_definition, rb_str_new2("members"));
     attribute_count  = RARRAY(class_attributes)->len;
   } else {
     class_definition = rb_hash_new();
@@ -285,15 +286,27 @@ static inline VALUE rb_deserialize(ramf3_load_context_t* context, uint8_t type)
 static VALUE t_deserialize(VALUE self, VALUE string)
 {
   ramf3_load_context_t context;
-  context.base.buffer     = (u_char*)RSTRING(string)->ptr;
-  context.base.cursor     = context.base.buffer;
-  context.base.buffer_end = context.base.buffer + RSTRING(string)->len;
+  int is_stringio = strcmp(rb_class2name(CLASS_OF(string)), "StringIO") == 0 ? 1 : 0;
+  if(is_stringio) {
+    VALUE str               = rb_funcall(string, rb_intern("string"), 0);
+    context.base.buffer     = RSTRING(str)->ptr;
+    context.base.cursor     = context.base.buffer + NUM2INT(rb_funcall(string, rb_intern("pos"), 0));
+    context.base.buffer_end = context.base.buffer + RSTRING(str)->len;
+  } else {
+    context.base.buffer     = RSTRING(string)->ptr;
+    context.base.cursor     = context.base.buffer;
+    context.base.buffer_end = context.base.buffer + RSTRING(string)->len;
+  }
   
   context.strings = rb_ary_new();
   context.objects = rb_ary_new();
   context.traits  = rb_ary_new();
   
-  return rb_deserialize(&context, READ_TYPE_FROM_IO);
+  VALUE return_val = rb_deserialize(&context, READ_TYPE_FROM_IO);
+  if(is_stringio) {
+    rb_funcall(string, rb_intern("pos="), 1, INT2NUM(context.base.cursor-context.base.buffer));
+  }
+  return return_val;
 } 
 
 VALUE rb_amf3_c_deserialize(ramf_load_context_t* loader)

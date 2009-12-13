@@ -3,6 +3,7 @@
 #include "ramf_core.h"
 #include "ramf_ReadIOHelpers_inline.h"
 #include "ramf_AMF3Deserializer.h"
+#include <string.h>
 
 #define STATIC static inline
 
@@ -244,11 +245,23 @@ STATIC VALUE rb_deserialize(ramf0_load_context_t* context, uint8_t type)
 static VALUE t_deserialize(VALUE self, VALUE string)
 {
   ramf0_load_context_t context;
-  context.base.buffer     = (u_char*)RSTRING(string)->ptr;
-  context.base.cursor     = context.base.buffer;
-  context.base.buffer_end = context.base.buffer + RSTRING(string)->len;
+  uint8_t is_stringio = strcmp(rb_class2name(CLASS_OF(string)), "StringIO") == 0 ? 1 : 0;
+  if(is_stringio) {
+    VALUE str               = rb_funcall(string, rb_intern("string"), 0);
+    context.base.buffer     = RSTRING(str)->ptr;
+    context.base.cursor     = context.base.buffer + NUM2INT(rb_funcall(string, rb_intern("pos"), 0));
+    context.base.buffer_end = context.base.buffer + RSTRING(str)->len;
+  } else {
+    context.base.buffer     = RSTRING(string)->ptr;
+    context.base.cursor     = context.base.buffer;
+    context.base.buffer_end = context.base.buffer + RSTRING(string)->len;
+  }
   
   context.cache = rb_ary_new();
   
-  return rb_deserialize(&context, READ_TYPE_FROM_IO);
+  VALUE return_val = rb_deserialize(&context, READ_TYPE_FROM_IO);
+  if(is_stringio) {
+    rb_funcall(string, rb_intern("pos="), 1, INT2NUM(context.base.cursor-context.base.buffer));
+  }
+  return return_val;
 } 

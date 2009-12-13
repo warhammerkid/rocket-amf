@@ -6,7 +6,6 @@ require 'rocketamf/remoting'
 module RocketAMF
   begin
     require 'rocketamf/ext'
-    #raise LoadError, 'C extensions not implemented'
   rescue LoadError
     require 'rocketamf/pure'
   end

@@ -1,3 +1,5 @@
+#raise LoadError, 'C extensions not implemented'
+
 require 'rocketamf/pure/serializer'
 require 'rocketamf/pure/remoting'
 require 'ramf_ext'
