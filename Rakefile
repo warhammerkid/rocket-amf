@@ -15,15 +15,15 @@ end
 desc 'Generate documentation for the RocketAMF plugin.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'RocketAMF'
+  rdoc.title    = 'scotttam-RocketAMF'
   rdoc.options << '--line-numbers' << '--main' << 'README.rdoc'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
 spec = Gem::Specification.new do |s|
-  s.name    = 'RocketAMF'
-  s.version = '0.2.1'
+  s.name    = 'scotttam-RocketAMF'
+  s.version = '0.2.2'
   s.summary = 'Fast AMF serializer/deserializer with remoting request/response wrappers to simplify integration'
 
   s.files        = FileList['README.rdoc', 'Rakefile', 'lib/**/*.rb', 'spec/**/*.rb', 'spec/**/*.bin', 'spec/spec.opts']
@@ -34,9 +34,9 @@ spec = Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.rdoc']
   s.rdoc_options     = ['--line-numbers', '--main', 'README.rdoc']
 
-  s.authors  = ['Jacob Henry', 'Stephen Augenstein', "Joc O'Connor"]
+  s.authors  = ['Jacob Henry', 'Stephen Augenstein', "Joc O'Connor", "Scott Tamosunas"]
   s.email    = 'perl.programmer@gmail.com'
-  s.homepage = 'http://github.com/warhammerkid/rocket-amf'
+  s.homepage = 'http://github.com/scotttam/rocket-amf'
 
   s.platform = Gem::Platform::RUBY
 end

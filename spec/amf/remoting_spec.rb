@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper.rb'
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper.rb')
 
 describe RocketAMF::Envelope do
   describe 'deserializer' do
@@ -24,6 +24,21 @@ describe RocketAMF::Envelope do
       message.body.should == {}
     end
   end
+
+  describe "#deserialize" do
+    it "should parse the message envelope into a hash" do
+      parsed_amf = RocketAMF::Envelope.new.deserialize(create_envelope('commandMessage.bin').serialize)
+      parsed_amf[:amf_version].should == 3
+      parsed_amf[:headers].should == []
+      parsed_amf[:bodies].first[:target_uri].should == "null"
+      parsed_amf[:bodies].first[:response_uri].should == "/1"
+      puts parsed_amf[:bodies].first[:content].class.should == RocketAMF::Values::CommandMessage
+    end
+
+    it "should return nil if nil is passed in" do
+      RocketAMF::Envelope.new.deserialize(nil).should be_nil
+    end
+  end  
 
   describe 'serializer' do
     it "should serialize response when converted to string" do

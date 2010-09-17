@@ -88,6 +88,44 @@ module RocketAMF
         stream
       end
 
+      def deserialize(stream)
+        return nil unless stream
+        stream = StringIO.new(stream) unless StringIO === stream
+
+        amf_hash = {}
+        amf_hash[:amf_version] = read_int16_network(stream)
+
+        headers = []
+        header_count = read_int16_network(stream)
+        header_count.to_i.times do
+          header = {}
+          header_name_length = read_int16_network(stream)
+          header[:name] = stream.read(header_name_length)
+          header[:must_understand] = read_int8(stream)
+          buffer = read_word32_network(stream)
+          header[:content] = RocketAMF.deserialize(stream, @amf_version)
+          headers << header
+        end
+        amf_hash[:headers] = headers
+
+        bodies = []
+        body_count = read_int16_network(stream)
+        body_count.to_i.times do
+          body = {}
+          target_uri_length = read_int16_network(stream)
+          body[:target_uri] = stream.read(target_uri_length)
+          response_uri_length = read_int16_network(stream)
+          body[:response_uri] = stream.read(response_uri_length)
+          buffer = read_word32_network(stream)
+          amf_version_3 = read_int16_network(stream) if @amf_version == 3
+          body[:content] = RocketAMF.deserialize(stream, @amf_version)
+          bodies << body
+        end
+        amf_hash[:bodies] = bodies
+
+        amf_hash
+      end
+
       private
       include RocketAMF::Pure::ReadIOHelpers
       include RocketAMF::Pure::WriteIOHelpers
