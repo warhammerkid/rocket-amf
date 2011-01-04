@@ -554,13 +554,13 @@ static VALUE ser3_write_object0(VALUE self, VALUE obj, VALUE props, VALUE traits
     int did_ref = 0;
     VALUE trait_index;
     if(class_name != Qnil) {
-        if(st_lookup(ser->trait_cache, (st_data_t)RSTRING_PTR(class_name), &trait_index)) {
-            ser_write_int(ser, FIX2INT(trait_index) << 2 | 0x01);
-            did_ref = 1;
-        } else {
+        // if(st_lookup(ser->trait_cache, (st_data_t)RSTRING_PTR(class_name), &trait_index)) {
+        //    ser_write_int(ser, FIX2INT(trait_index) << 2 | 0x01);
+        //    did_ref = 1;
+        // } else {
             st_add_direct(ser->trait_cache, (st_data_t)strdup(RSTRING_PTR(class_name)), LONG2FIX(ser->trait_index));
             ser->trait_index++;
-        }
+        // }
     }
 
     // Write traits outs if didn't write reference

@@ -327,9 +327,9 @@ module RocketAMF
         end
 
         # Write out traits
-        if traits[:class_name] && @trait_cache[traits] != nil
-          @stream << pack_integer(@trait_cache[traits] << 2 | 0x01)
-        else
+        # if traits[:class_name] && @trait_cache[traits] != nil
+        #   @stream << pack_integer(@trait_cache[traits] << 2 | 0x01)
+        # else
           @trait_cache.add_obj traits if traits[:class_name]
 
           # Write out trait header
@@ -344,7 +344,7 @@ module RocketAMF
 
           # Write out members
           traits[:members].each {|m| write_utf8_vr(m)}
-        end
+        # end
 
         # If externalizable, take externalized data shortcut
         if traits[:externalizable]
