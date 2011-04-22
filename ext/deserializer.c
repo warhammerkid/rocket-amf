@@ -473,7 +473,9 @@ static VALUE des3_read_object(VALUE self) {
 
         // Optimization for deserializing ArrayCollection
         if(strcmp(RSTRING_PTR(class_name), "flex.messaging.io.ArrayCollection") == 0) {
-            return des3_deserialize(self);
+            VALUE arr = des3_deserialize(self); // Adds ArrayCollection array to object cache automatically
+            rb_ary_push(des->obj_cache, arr); // Add again for ArrayCollection source array
+            return arr;
         }
 
         VALUE obj = rb_funcall(class_mapper, id_get_ruby_obj, 1, class_name);
