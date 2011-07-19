@@ -1,0 +1,14 @@
+== Notice:
+
+Further development of RocketAMF has moved to https://github.com/rubyamf/rocketamf.
+Both the master branch and experiment branch are still available for use if you
+need them, but experiment users should switch to the new repo, as there have been
+some substantial improvements.
+
+== DESCRIPTION:
+
+RocketAMF is a full featured AMF0/3 serializer and deserializer with support for
+Flash -> Ruby and Ruby -> Flash class mapping, custom serializers, remoting
+gateway helpers that follow AMF0/3 messaging specs, and a suite of specs to
+ensure adherence to the specification documents put out by Adobe. In addition,
+it now fully supports Ruby 1.9.
